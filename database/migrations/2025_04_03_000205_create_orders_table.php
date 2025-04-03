@@ -14,6 +14,10 @@ return new class extends Migration
     Schema::create('orders', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained();
+        $table->foreignId('payment_method_id')->constrained();
+        $table->string('payment_status')->default('pending'); // pending/paid/confirmed/cancelled
+        $table->timestamp('paid_at')->nullable();
+        $table->boolean('requires_payment_verification')->default(false);
         $table->decimal('total_amount', 10, 2);
         $table->string('status')->default('pending');
         $table->timestamps();
