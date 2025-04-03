@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.admin-nav-link {
+    @apply flex items-center px-3 py-2 rounded-md transition-colors;
+}
+
+.admin-nav-link:hover {
+    @apply bg-gray-700;
+}
+
+.admin-nav-link.active {
+    @apply bg-blue-600 text-white;
+}
+
+.admin-nav-link i {
+    @apply mr-3;
+}
+.sidebar {
+    transition: all 0.3s;
+}
+
+.sidebar:hover {
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+[x-cloak] { 
+    display: none !important; 
+}
