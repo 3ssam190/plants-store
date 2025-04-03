@@ -18,6 +18,22 @@ return [
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
+
+
+
+    'guards' => [
+    'admin' => [
+        'driver' => 'session',
+        'provider' => 'admins',
+    ],
+],
+
+'providers' => [
+    'admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Admin::class,
+    ],
+],
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards

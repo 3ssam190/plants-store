@@ -1,63 +1,57 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Plants Store') }}</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plants Store - @yield('title')</title>
     
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Your main CSS -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
+    @stack('styles')
 </head>
-
-<body class="font-sans antialiased">
-    <nav>
-        <div class="flex items-center space-x-4">
-            <!-- Other nav links -->
-            @auth
-                @if(auth()->user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" 
-                       class="px-3 py-2 text-sm font-medium bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
-                       Admin Panel
+<body class="font-sans bg-gray-50">
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="{{ url('/') }}" class="text-2xl font-bold text-green-600">
+                <i class="fas fa-leaf mr-2"></i>Plants Store
+            </a>
+            
+            <nav class="flex items-center space-x-6">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-green-600">
+                        <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
                     </a>
-                @endif
-            @endauth
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="text-gray-700 hover:text-green-600">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-green-600">
+                        <i class="fas fa-sign-in-alt mr-1"></i> Login
+                    </a>
+                @endauth
+            </nav>
         </div>
-    </nav>
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        @include('layouts.navigation')
+    </header>
 
-        <!-- Page Heading -->
-        @if(isset($header))
-            <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
+    <main class="container mx-auto px-4 py-8">
+        @yield('content')
+    </main>
 
-        <!-- Page Content -->
-        <main class="container mx-auto px-4 py-6">
-            @yield('content')  
-            
-            @if(session('success'))
-                <div class="alert alert-success mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-            
-            @if(session('error'))
-                <div class="alert alert-danger mb-4">
-                    {{ session('error') }}
-                </div>
-            @endif
-        </main>
-    </div>
+    <footer class="bg-white border-t mt-8 py-6">
+        <div class="container mx-auto px-4 text-center text-gray-500">
+            &copy; {{ date('Y') }} Plants Store. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
+    @stack('scripts')
 </body>
 </html>

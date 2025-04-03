@@ -29,14 +29,17 @@ class PaymentController extends Controller
         return view('payment.rejected', compact('order'));
     }
 
-    public function success(Order $order)
-    {
-        if ($order->payment_status !== 'confirmed') {
-            return redirect()->route('orders.show', $order);
-        }
-
-        return view('payment.success', compact('order'));
-    }
+    public function success($orderId)
+{
+    $order = Order::findOrFail($orderId);
+    $order->update([
+        'payment_verified' => true,
+        'payment_method' => request('payment_method'),
+        'payment_date' => now()
+    ]);
+    
+    return view('payment.success', compact('order'));
+}
 
     public function verifyManual(Request $request)
     {

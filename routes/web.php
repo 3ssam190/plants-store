@@ -1,33 +1,38 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\PlantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\OrderController; // Added this import
-use App\Http\Controllers\Admin\PlantController as AdminPlantController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\OrderController;
+
+// ... rest of your routes
 // Public Routes
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Make sure this comes before your auth routes
-Route::get('/plants', [PlantController::class, 'index'])->name('plants.index');
-
-// Plants Routes (Public viewing)
+// Public Plant Routes
 Route::resource('plants', PlantController::class)->only(['index', 'show']);
 
-// Authentication Routes
-require __DIR__.'/auth.php';
+// Authentication Routes (from auth.php)
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+});
+
 
 // Authenticated User Routes
 Route::middleware('auth')->group(function () {
-    // Plants management (for regular users)
+    // Logout
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+     ->name('logout')
+     ->middleware('auth');
+    
+    // Plants management
     Route::resource('plants', PlantController::class)->except(['index', 'show']);
     
     // Checkout Process
@@ -37,7 +42,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/payment/{order}', [CheckoutController::class, 'payment'])->name('checkout.payment');
     });
 
-    // Payment Status
+    // Payment Routes
     Route::prefix('payment')->group(function () {
         Route::get('/pending/{order}', [PaymentController::class, 'pending'])
             ->name('payment.pending')
@@ -58,39 +63,18 @@ Route::middleware('auth')->group(function () {
     Route::middleware('verify.payment')->group(function () {
         Route::resource('orders', OrderController::class)->only(['index', 'show']);
     });
-    
-    // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
-    
-    // Profile
-    Route::get('/profile', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])
-        ->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
-});
 
-// Admin Routes
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-        ->name('admin.dashboard');
+    // Add this with your other routes
+Route::prefix('admin')->group(function() {
+    Route::get('/login', [\App\Http\Controllers\Admin\Auth\AdminLoginController::class, 'showLoginForm'])
+         ->name('admin.login');
+         
+    Route::post('/login', [\App\Http\Controllers\Admin\Auth\AdminLoginController::class, 'login']);
+});
     
-    // Admin Plants management
-    Route::resource('plants', AdminPlantController::class)
-        ->names('admin.plants');
-    
-    // Users management
-    Route::resource('users', UserController::class)
-        ->names('admin.users');
-        
-    // Order Management
-    Route::prefix('orders')->group(function () {
-        Route::get('/', [AdminOrderController::class, 'index'])->name('admin.orders.index');
-        Route::get('/pending', [AdminOrderController::class, 'pendingPayments'])->name('admin.orders.pending');
-        Route::get('/{order}', [AdminOrderController::class, 'show'])->name('admin.orders.show');
-        Route::post('/{order}/verify', [AdminOrderController::class, 'verifyPayment'])->name('admin.orders.verify');
-        Route::post('/{order}/cancel', [AdminOrderController::class, 'cancel'])->name('admin.orders.cancel');
-    });
+    // Dashboard & Profile
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

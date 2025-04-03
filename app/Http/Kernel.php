@@ -1,4 +1,4 @@
-<<?php
+<?php
 
 namespace App\Http;
 
@@ -27,6 +27,9 @@ class Kernel extends HttpKernel
     /**
      * The application's route middleware groups.
      */
+
+
+     
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
@@ -50,6 +53,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
@@ -57,12 +61,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        
-        // Payment-specific middleware
-        'admin' => \App\Http\Middleware\AdminMiddleware::class,
-        'verify.payment' => \App\Http\Middleware\VerifyOrderPayment::class,
+        'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class, // Your custom admin middleware
+        'verify.payment' => \App\Http\Middleware\VerifyPayment::class, // If you have this
     ];
-
     /**
      * The priority-sorted list of middleware.
      */

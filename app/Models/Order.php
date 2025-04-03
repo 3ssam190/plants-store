@@ -3,16 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Order extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'payment_method_id',
-        'payment_status',
-        // other fields...
-    ];
-    
+    use HasFactory;
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -22,7 +16,18 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    protected $casts = [
+        'payment_verified' => 'boolean',
+        'payment_date' => 'datetime',
+    ];
     
+    protected $fillable = [
+        // ... other fields
+        'payment_verified',
+        'payment_method', 
+        'payment_date'
+    ];
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class);

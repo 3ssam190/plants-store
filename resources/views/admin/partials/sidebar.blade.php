@@ -1,28 +1,30 @@
-<div class="w-64 bg-gray-800 text-white">
-    <div class="p-4 border-b border-gray-700">
-        <h2 class="text-xl font-bold">PlantsStore Admin</h2>
+<aside class="admin-sidebar">
+    <div class="sidebar-brand">
+        <h2><i class="fas fa-leaf"></i> Plants Admin</h2>
     </div>
-    <nav class="p-4 space-y-2">
-        <x-admin-nav-link href="{{ route('admin.dashboard') }}" icon="ri-dashboard-line">
-            Dashboard
-        </x-admin-nav-link>
-        
-        <x-admin-nav-link href="{{ route('admin.plants.index') }}" icon="ri-plant-line">
-            Plants
-        </x-admin-nav-link>
-        
-        <x-admin-nav-link href="{{ route('admin.users.index') }}" icon="ri-user-line">
-            Users
-        </x-admin-nav-link>
-        
-        <x-admin-nav-link href="#" icon="ri-shopping-cart-line">
-            Orders
-        </x-admin-nav-link>
-        
-        <div class="pt-4 border-t border-gray-700 mt-4">
-            <x-admin-nav-link href="#" icon="ri-settings-line">
-                Settings
-            </x-admin-nav-link>
-        </div>
+    
+    <nav class="sidebar-nav">
+        <ul>
+            <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li class="{{ request()->is('admin/plants*') ? 'active' : '' }}">
+                <a href="{{ route('admin.plants.index') }}">
+                    <i class="fas fa-seedling"></i> Plants
+                </a>
+            </li>
+            <li class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
+                <a href="{{ route('admin.orders.index') }}">
+                    <i class="fas fa-shopping-cart"></i> Orders
+                </a>
+            </li>
+            <li class="{{ request()->is('admin/users*') ? 'active' : '' }}">
+                <a href="{{ route('admin.users.index') }}">
+                    <i class="fas fa-users"></i> Users
+                </a>
+            </li>
+        </ul>
     </nav>
-</div>
+</aside>

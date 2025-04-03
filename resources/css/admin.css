@@ -2,29 +2,208 @@
 @tailwind components;
 @tailwind utilities;
 
-.admin-nav-link {
-    @apply flex items-center px-3 py-2 rounded-md transition-colors;
+/* Admin Variables */
+:root {
+    --admin-primary: #2e7d32;
+    --admin-secondary: #1b5e20;
+    --admin-accent: #81c784;
+    --admin-light: #f5f5f5;
+    --admin-dark: #0d1f12;
+    --admin-text: #333333;
+    --admin-border: #e0e0e0;
 }
 
-.admin-nav-link:hover {
-    @apply bg-gray-700;
+/* Base Styles */
+.admin-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
 }
 
-.admin-nav-link.active {
-    @apply bg-blue-600 text-white;
+.admin-container {
+    display: flex;
+    min-height: 100vh;
 }
 
-.admin-nav-link i {
-    @apply mr-3;
+
+/* Sidebar Styles */
+.admin-sidebar {
+    width: 250px;
+    background-color: var(--admin-primary);
+    color: white;
+    transition: all 0.3s;
+    position: fixed;
+    height: 100%;
+    z-index: 1000;
 }
-.sidebar {
+
+.sidebar-brand {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-brand h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    text-decoration: none;
     transition: all 0.3s;
 }
 
-.sidebar:hover {
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+.sidebar-nav li a:hover {
+    background-color: var(--admin-secondary);
 }
 
-[x-cloak] { 
-    display: none !important; 
+.sidebar-nav li.active a {
+    background-color: var(--admin-secondary);
+    border-left: 4px solid var(--admin-accent);
+}
+
+/* Main Content Area */
+.admin-main {
+    flex: 1;
+    margin-left: 250px;
+    transition: all 0.3s;
+}
+
+.admin-header {
+    background-color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-content {
+    padding: 1.5rem;
+    min-height: calc(100vh - 70px);
+}
+
+/* Logout Button Styles */
+.profile-dropdown form button {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: #333;
+}
+
+.profile-dropdown form button:hover {
+    background: #f0f0f0;
+    color: #2e7d32;
+}
+
+
+.admin-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.admin-login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.admin-login-box h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #3182ce;
+}
+
+.error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.remember input {
+    width: auto;
+    margin-right: 0.5rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .admin-sidebar .sidebar-brand h2 span,
+    .admin-sidebar .sidebar-nav li a span {
+        display: none;
+    }
+    
+    .admin-main {
+        margin-left: 70px;
+    }
 }
